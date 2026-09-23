@@ -15,7 +15,7 @@ class Card < ApplicationRecord
   SEARCH_CONTENT_LIMIT = 32.kilobytes
 
   has_search index: :searchable, async: false, if: :published?,
-    scope: -> { preload(:board, :creator) },
+    scope: -> { preload(:board, :creator).with_rich_text_description },
     serializer: ->(card) {
     { account_id: card.account_id, card_id: card.id, board_id: card.board_id,
       title: card.title, content: card.description.to_plain_text.truncate_bytes(SEARCH_CONTENT_LIMIT, omission: ""),
